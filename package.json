@@ -5,10 +5,10 @@
   "packageManager": "pnpm@12.8.1",
   "scripts": {
     "dev": "pnpm --filter gallery dev",
-    "typecheck": "tsc -b",
+    "typecheck": "pnpm -r typecheck",
     "lint": "eslint .",
     "test": "vitest run",
-    "build": "pnpm -r build",
+    "build": "pnpm -r --if-present build",
     "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build"
   },
   "devDependencies": {

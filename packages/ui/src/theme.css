@@ -1,0 +1,49 @@
+/*
+ * Maps Tailwind utilities to Sakalya theme variables, so `bg-primary`, `text-muted`,
+ * `rounded-card` and `shadow-card` follow whichever tenant theme a ThemeScope applies.
+ *
+ * In an app's stylesheet:
+ *   @import "tailwindcss";
+ *   @import "@sakalya/ui/theme.css";
+ *   @source "../node_modules/@sakalya/ui/src";
+ */
+
+@theme inline {
+  --color-brand: var(--sk-brand);
+  --color-primary: var(--sk-primary);
+  --color-primary-hover: var(--sk-primary-hover);
+  --color-primary-soft: var(--sk-primary-soft);
+  --color-on-primary: var(--sk-on-primary);
+  --color-background: var(--sk-background);
+  --color-surface: var(--sk-surface);
+  --color-surface-muted: var(--sk-surface-muted);
+  --color-border: var(--sk-border);
+  --color-text: var(--sk-text);
+  --color-muted: var(--sk-text-muted);
+  --color-sidebar: var(--sk-sidebar);
+  --color-sidebar-text: var(--sk-sidebar-text);
+  --color-sidebar-active: var(--sk-sidebar-active);
+  --color-sidebar-active-text: var(--sk-sidebar-active-text);
+  --color-success: var(--sk-success);
+  --color-success-soft: var(--sk-success-soft);
+  --color-warning: var(--sk-warning);
+  --color-warning-soft: var(--sk-warning-soft);
+  --color-danger: var(--sk-danger);
+  --color-danger-soft: var(--sk-danger-soft);
+  --color-info: var(--sk-info);
+  --color-info-soft: var(--sk-info-soft);
+  --color-chart-1: var(--sk-chart-1);
+  --color-chart-2: var(--sk-chart-2);
+  --color-chart-3: var(--sk-chart-3);
+  --color-chart-4: var(--sk-chart-4);
+  --radius-card: var(--sk-radius);
+  --shadow-card: var(--sk-shadow);
+  --font-sans: var(--sk-font, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

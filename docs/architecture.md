@@ -29,3 +29,7 @@ Presets give doctors a starting point: each sets a brand colour, corner radius a
 | Motion | CSS transitions first; Motion for orchestrated moments | Small; respects reduced motion |
 
 AWS Cloudscape was considered. It is robust for dense consoles but looks like the AWS console and is hard to brand per tenant, which conflicts with white-labeling.
+
+## Build model
+
+Packages export their TypeScript source (`"exports": "./src/index.ts"`). Apps compile them with Vite, so there is no separate library build to keep in sync. Each package type-checks itself with `tsc --noEmit`.
