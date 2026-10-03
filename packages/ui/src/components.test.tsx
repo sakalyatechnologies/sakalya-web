@@ -4,7 +4,7 @@ import { fireEvent } from "@testing-library/dom";
 
 import { createTheme, hex } from "@sakalya/tokens";
 
-import { AppShell, IconButton, Pill, StatCard, ThemeScope, Timeline } from "./index.js";
+import { AppShell, Avatar, IconButton, Pill, StatCard, ThemeScope, Timeline } from "./index.js";
 
 afterEach(cleanup);
 
@@ -49,6 +49,13 @@ describe("IconButton", () => {
       </IconButton>,
     );
     expect(screen.getByRole("button", { name: "Notifications, 3 new" })).toBeTruthy();
+  });
+});
+
+describe("Avatar", () => {
+  it("uses letters only for initials", () => {
+    render(<Avatar name="Gloves (M)" />);
+    expect(screen.getByRole("img", { name: "Gloves (M)" }).textContent).toBe("GM");
   });
 });
 

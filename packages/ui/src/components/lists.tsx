@@ -47,7 +47,7 @@ export function Timeline({ items, onMenu }: TimelineProps) {
               <span aria-hidden="true" className="absolute left-[4px] top-5 h-[calc(100%+0.5rem)] w-px bg-border" />
             ) : null}
           </div>
-          <div className="grid grid-cols-1 items-center gap-3 rounded-2xl px-2 py-1 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_auto_auto]">
+          <div className="grid grid-cols-1 items-center gap-3 rounded-2xl px-2 py-1 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_9.5rem_2rem]">
             <div className="flex min-w-0 items-center gap-3">
               <Avatar name={item.title} size="sm" />
               <div className="min-w-0">
@@ -59,9 +59,11 @@ export function Timeline({ items, onMenu }: TimelineProps) {
               <p className="truncate text-sm font-semibold text-text">{item.detail}</p>
               <p className="truncate text-xs text-muted">{item.detailSub}</p>
             </div>
-            <Pill tone={item.status.tone} icon={item.status.icon}>
-              {item.status.label}
-            </Pill>
+            <span className="justify-self-start">
+              <Pill tone={item.status.tone} icon={item.status.icon}>
+                {item.status.label}
+              </Pill>
+            </span>
             {onMenu ? (
               <button
                 type="button"

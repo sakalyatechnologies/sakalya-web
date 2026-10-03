@@ -109,6 +109,7 @@ export interface AvatarProps {
 /** A person's photo, or their initials on a tinted circle. */
 export function Avatar({ name, imageUrl, size = "md" }: AvatarProps) {
   const initials = name
+    .replace(/[^\p{L}\s]/gu, "")
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
