@@ -1,6 +1,6 @@
 # AGENTS.md: sakalya-web
 
-Shared, product-agnostic web building blocks for Sakalya Technologies: design tokens, the white-label theme engine, and React components. Arogyam's clinic portal, console and clinic websites are the first consumers.
+Shared, product-agnostic web building blocks for Sakalya Technologies: design tokens, the white-label theme engine, and React components. Aarogyam's clinic portal, console and clinic websites are the first consumers.
 
 Nothing here may mention a product concept (patient, clinic, society). Components take generic data: `title`, `value`, `status`, `items`.
 
