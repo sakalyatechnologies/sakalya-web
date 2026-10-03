@@ -155,6 +155,7 @@ export function SampleDashboard() {
       sidebarFooter={<SidebarPromo />}
       topBarEnd={<TopBarEnd />}
       searchPlaceholder="Search patients, appointments, treatments, invoices…"
+      onSearch={() => undefined}
     >
       <PageHeader
         title="Good morning, Dr. Kiran"

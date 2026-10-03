@@ -1,4 +1,13 @@
-export { AppShell, PageHeader, UserChip, type AppShellProps, type NavEntry, type PageHeaderProps, type UserChipProps } from "./components/app-shell.js";
+export {
+  AppShell,
+  PageHeader,
+  UserChip,
+  type AppShellLabels,
+  type AppShellProps,
+  type NavEntry,
+  type PageHeaderProps,
+  type UserChipProps,
+} from "./components/app-shell.js";
 export {
   BarChart,
   cleanBarData,
@@ -38,6 +47,7 @@ export {
   type TextInputProps,
   type TextInputType,
 } from "./components/inputs.js";
+export { Link, LinkProvider, type LinkProps, type LinkProviderProps, type RenderLink } from "./components/link.js";
 export {
   AttentionList,
   PersonList,

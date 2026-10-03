@@ -2,6 +2,7 @@ import { ChevronRight, MoreVertical } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { cx, type Tone } from "../cx.js";
+import { Link } from "./link.js";
 import { Avatar, IconBubble, Pill } from "./primitives.js";
 
 export interface Status {
@@ -100,7 +101,10 @@ export function AttentionList({ items }: { items: readonly AttentionItem[] }) {
     <ul className="divide-y divide-border">
       {items.map((item) => (
         <li key={item.id}>
-          <a href={item.href} className="flex items-center gap-3 rounded-xl py-3 transition-colors hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-primary">
+          <Link
+            href={item.href}
+            className="flex items-center gap-3 rounded-xl py-3 transition-colors hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-primary"
+          >
             <IconBubble tone={item.tone} size="sm">
               {item.icon}
             </IconBubble>
@@ -109,7 +113,7 @@ export function AttentionList({ items }: { items: readonly AttentionItem[] }) {
               <span className="block truncate text-xs text-muted">{item.subtitle}</span>
             </span>
             <ChevronRight aria-hidden="true" className="size-4 text-muted" />
-          </a>
+          </Link>
         </li>
       ))}
     </ul>

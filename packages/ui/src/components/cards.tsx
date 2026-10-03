@@ -2,6 +2,7 @@ import { ArrowDownRight, ArrowUpRight, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { TONE_CLASSES, cx, type Tone } from "../cx.js";
+import { Link } from "./link.js";
 import { IconBubble } from "./primitives.js";
 
 export interface CardProps {
@@ -32,13 +33,16 @@ export interface CardLinkProps {
   children: ReactNode;
 }
 
-/** The "View all →" link used in card headers. */
+/** The "View all →" link used in card headers. Uses the app's router link inside a `LinkProvider`. */
 export function CardLink({ href, children }: CardLinkProps) {
   return (
-    <a href={href} className="inline-flex items-center gap-1 text-sm font-semibold text-primary-text hover:underline">
+    <Link
+      href={href}
+      className="inline-flex items-center gap-1 rounded-md text-sm font-semibold text-primary-text hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+    >
       {children}
       <ChevronRight aria-hidden="true" className="size-4" />
-    </a>
+    </Link>
   );
 }
 
@@ -79,9 +83,9 @@ export function StatCard({ label, value, icon, tone = "primary", trend, footer, 
   );
   const shell = "block rounded-card border border-border bg-surface p-5 shadow-card";
   return href ? (
-    <a href={href} className={cx(shell, "transition-shadow hover:shadow-lg focus-visible:outline-2 focus-visible:outline-primary")}>
+    <Link href={href} className={cx(shell, "transition-shadow hover:shadow-lg focus-visible:outline-2 focus-visible:outline-primary")}>
       {body}
-    </a>
+    </Link>
   ) : (
     <section className={shell}>{body}</section>
   );
