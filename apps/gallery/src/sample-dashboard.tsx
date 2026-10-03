@@ -228,6 +228,7 @@ export function SampleDashboard() {
               data={HOURS}
               totalLabel="Appointments"
               partLabel="Completed"
+              categoryLabel="Hour"
               summary="Appointments and completed visits by hour, peaking at 8 at 3 PM"
             />
           </Card>

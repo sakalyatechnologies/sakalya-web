@@ -1,5 +1,13 @@
 export { AppShell, PageHeader, UserChip, type AppShellProps, type NavEntry, type PageHeaderProps, type UserChipProps } from "./components/app-shell.js";
-export { BarChart, type BarChartProps, type BarDatum } from "./components/bar-chart.js";
+export {
+  BarChart,
+  cleanBarData,
+  type BarChartProps,
+  type BarDataIssue,
+  type BarDataProblem,
+  type BarDatum,
+  type CleanBarData,
+} from "./components/bar-chart.js";
 export { Card, CardLink, StatCard, type CardLinkProps, type CardProps, type StatCardProps, type Trend } from "./components/cards.js";
 export { Checkbox, RadioGroup, type CheckboxProps, type RadioGroupProps, type RadioOption } from "./components/choices.js";
 export {
