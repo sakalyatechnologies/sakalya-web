@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  COLOR_TOKENS,
   PRESETS,
   checkContrast,
   contrastRatio,
   createTheme,
   hex,
   parseHexColor,
+  parseTheme,
   toCssText,
   toCssVariables,
 } from "./index.js";
@@ -116,5 +118,69 @@ describe("CSS output", () => {
     const css = toCssText(createTheme({ brand: hex("#14a89a"), mode: "dark" }), "[data-tenant]");
     expect(css.startsWith("[data-tenant] {")).toBe(true);
     expect(css).toContain("--sk-surface:");
+  });
+});
+
+describe("parseTheme", () => {
+  const theme = createTheme({ brand: hex("#14a89a"), mode: "dark", radius: 12, surface: "flat" });
+
+  it("reads back a stored theme exactly", () => {
+    const stored: unknown = JSON.parse(JSON.stringify(theme));
+    expect(parseTheme(stored)).toEqual({ ok: true, value: theme });
+  });
+
+  it("knows every colour token the engine produces", () => {
+    expect([...COLOR_TOKENS].sort()).toEqual(Object.keys(theme.colors).sort());
+  });
+
+  it("normalises colours and drops unknown fields", () => {
+    const result = parseTheme({ ...theme, extra: "<script>", colors: { ...theme.colors, primary: "#ABCDEF", note: 1 } });
+    expect(result.ok && result.value.colors.primary).toBe("#abcdef");
+    expect(result.ok && "extra" in result.value).toBe(false);
+    expect(result.ok && "note" in result.value.colors).toBe(false);
+  });
+
+  it.each([
+    ["not an object", null, "a theme must be an object"],
+    ["a list", [], "a theme must be an object"],
+    ["an unknown mode", { ...theme, mode: "sepia" }, "mode must be light or dark"],
+    ["a radius that is not a number", { ...theme, radius: "12px" }, "radius must be a number from 0 to 48"],
+    ["a negative radius", { ...theme, radius: -1 }, "radius must be a number from 0 to 48"],
+    ["an unknown surface", { ...theme, surface: "glass" }, "surface must be soft or flat"],
+    ["no colours", { ...theme, colors: "red" }, "colors must be an object"],
+    ["a missing colour", { ...theme, colors: { ...theme.colors, danger: undefined } }, "colors.danger must be a hex colour"],
+    [
+      "a colour that injects CSS",
+      { ...theme, colors: { ...theme.colors, primary: "red; } body { display: none" } },
+      "colors.primary must be a hex colour",
+    ],
+  ])("rejects %s", (_case, input, error) => {
+    expect(parseTheme(input)).toEqual({ ok: false, error });
+  });
+});
+
+describe("CSS output safety", () => {
+  const theme = createTheme({ brand: hex("#14a89a"), mode: "light" });
+
+  it("accepts ordinary selectors", () => {
+    expect(toCssText(theme, '[data-tenant="acme"] .portal').startsWith('[data-tenant="acme"] .portal {')).toBe(true);
+    expect(toCssText(theme, "html:root, .theme-preview > *")).toContain("--sk-primary:");
+  });
+
+  it.each([
+    ["a selector that closes the rule", ":root { } body"],
+    ["a selector that closes the style element", "</style><script>alert(1)</script>"],
+    ["a selector with a comment", ":root /* x */"],
+    ["an unbalanced quote", '[data-x="a]'],
+    ["an empty selector", "  "],
+  ])("refuses %s", (_case, selector) => {
+    expect(() => toCssText(theme, selector)).toThrow("unsafe CSS selector");
+  });
+
+  it("refuses a theme that skipped validation", () => {
+    const tampered = structuredClone(theme);
+    Reflect.set(tampered.colors, "primary", "red; } body { display: none");
+    expect(() => toCssText(tampered)).toThrow("colors.primary must be a hex colour");
+    expect(() => toCssVariables(tampered)).toThrow("refusing to write an invalid theme");
   });
 });
