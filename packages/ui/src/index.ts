@@ -2,6 +2,17 @@ export { AppShell, PageHeader, UserChip, type AppShellProps, type NavEntry, type
 export { BarChart, type BarChartProps, type BarDatum } from "./components/bar-chart.js";
 export { Card, CardLink, StatCard, type CardLinkProps, type CardProps, type StatCardProps, type Trend } from "./components/cards.js";
 export { Checkbox, RadioGroup, type CheckboxProps, type RadioGroupProps, type RadioOption } from "./components/choices.js";
+export {
+  DataTable,
+  sortRows,
+  type DataTableColumn,
+  type DataTableLabels,
+  type DataTableProps,
+  type SortDirection,
+  type SortState,
+  type SortValue,
+} from "./components/data-table.js";
+export { EmptyState, Skeleton, type EmptyStateProps, type SkeletonProps, type SkeletonShape } from "./components/feedback.js";
 export { Field, useFieldControl, type FieldControl, type FieldControlProps, type FieldProps } from "./components/field.js";
 export { FormActions, type FormActionsProps } from "./components/form-actions.js";
 export {
@@ -27,6 +38,7 @@ export {
   type TimelineItem,
   type TimelineProps,
 } from "./components/lists.js";
+export { Pagination, type PaginationLabels, type PaginationProps } from "./components/pagination.js";
 export {
   Avatar,
   Button,

@@ -46,5 +46,8 @@
   *, *::before, *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    /* Without this an infinite animation, such as a skeleton's pulse, would flicker rapidly. */
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
   }
 }
