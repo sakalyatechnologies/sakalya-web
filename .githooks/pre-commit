@@ -1,0 +1,5 @@
+#!/bin/sh
+# Local quality gate, the same as CI: typecheck, lint, tests, build.
+# Bypass only in an emergency: git commit --no-verify
+export PATH="/opt/homebrew/bin:$PATH"
+pnpm --silent check || { echo "pre-commit: pnpm check failed"; exit 1; }
