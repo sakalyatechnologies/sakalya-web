@@ -57,6 +57,43 @@ describe("createTheme", () => {
   });
 });
 
+describe("status and accent text", () => {
+  const STATUSES = [
+    { color: "success", soft: "successSoft", text: "successText", on: "onSuccess" },
+    { color: "warning", soft: "warningSoft", text: "warningText", on: "onWarning" },
+    { color: "danger", soft: "dangerSoft", text: "dangerText", on: "onDanger" },
+    { color: "info", soft: "infoSoft", text: "infoText", on: "onInfo" },
+  ] as const;
+  const cases = PRESETS.flatMap((p) => [
+    [p.name, "light", p.brand],
+    [p.name, "dark", p.brand],
+  ] as const);
+
+  it.each(cases)("%s in %s mode: pills, badges and links meet WCAG AA", (_name, mode, brand) => {
+    const { colors } = createTheme({ brand, mode });
+    for (const status of STATUSES) {
+      expect(contrastRatio(colors[status.text], colors[status.soft]), `${status.text} on its tint`).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(colors[status.text], colors.surface), `${status.text} on cards`).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(colors[status.on], colors[status.color]), `${status.on} on ${status.color}`).toBeGreaterThanOrEqual(4.5);
+    }
+    expect(contrastRatio(colors.primaryText, colors.surface)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(colors.primaryText, colors.primarySoft)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(colors.borderStrong, colors.surface)).toBeGreaterThanOrEqual(3);
+  });
+
+  it("puts dark labels on the light dark-mode danger colour instead of white", () => {
+    const { colors } = createTheme({ brand: hex("#14a89a"), mode: "dark" });
+    expect(colors.onDanger).not.toBe("#ffffff");
+    expect(contrastRatio(colors.onDanger, colors.danger)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("checks status pairs, so a tenant cannot save an unreadable pill", () => {
+    const theme = createTheme({ brand: hex("#14a89a"), mode: "light" });
+    const broken = { ...theme, colors: { ...theme.colors, dangerText: theme.colors.dangerSoft } };
+    expect(checkContrast(broken).map((issue) => issue.tokens)).toContainEqual(["dangerText", "dangerSoft"]);
+  });
+});
+
 describe("checkContrast", () => {
   it("reports unreadable pairs as errors", () => {
     const theme = createTheme({ brand: hex("#14a89a"), mode: "light" });

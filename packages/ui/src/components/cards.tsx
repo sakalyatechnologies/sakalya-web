@@ -35,7 +35,7 @@ export interface CardLinkProps {
 /** The "View all →" link used in card headers. */
 export function CardLink({ href, children }: CardLinkProps) {
   return (
-    <a href={href} className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+    <a href={href} className="inline-flex items-center gap-1 text-sm font-semibold text-primary-text hover:underline">
       {children}
       <ChevronRight aria-hidden="true" className="size-4" />
     </a>

@@ -13,6 +13,7 @@
   --color-primary: var(--sk-primary);
   --color-primary-hover: var(--sk-primary-hover);
   --color-primary-soft: var(--sk-primary-soft);
+  --color-primary-text: var(--sk-primary-text);
   --color-on-primary: var(--sk-on-primary);
   --color-background: var(--sk-background);
   --color-surface: var(--sk-surface);
@@ -28,12 +29,20 @@
   --color-sidebar-active-text: var(--sk-sidebar-active-text);
   --color-success: var(--sk-success);
   --color-success-soft: var(--sk-success-soft);
+  --color-success-text: var(--sk-success-text);
+  --color-on-success: var(--sk-on-success);
   --color-warning: var(--sk-warning);
   --color-warning-soft: var(--sk-warning-soft);
+  --color-warning-text: var(--sk-warning-text);
+  --color-on-warning: var(--sk-on-warning);
   --color-danger: var(--sk-danger);
   --color-danger-soft: var(--sk-danger-soft);
+  --color-danger-text: var(--sk-danger-text);
+  --color-on-danger: var(--sk-on-danger);
   --color-info: var(--sk-info);
   --color-info-soft: var(--sk-info-soft);
+  --color-info-text: var(--sk-info-text);
+  --color-on-info: var(--sk-on-info);
   --color-chart-1: var(--sk-chart-1);
   --color-chart-2: var(--sk-chart-2);
   --color-chart-3: var(--sk-chart-3);

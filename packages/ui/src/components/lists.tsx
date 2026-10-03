@@ -142,7 +142,7 @@ export function PersonList({ items }: { items: readonly PersonRowItem[] }) {
                 {item.status.label}
               </Pill>
             ) : item.value !== undefined ? (
-              <p className="text-sm font-bold tabular-nums text-success">{item.value}</p>
+              <p className="text-sm font-bold tabular-nums text-success-text">{item.value}</p>
             ) : null}
             {item.valueSub !== undefined ? <p className="mt-0.5 text-xs text-muted">{item.valueSub}</p> : null}
           </div>

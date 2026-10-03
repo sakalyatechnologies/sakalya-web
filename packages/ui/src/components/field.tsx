@@ -101,7 +101,7 @@ export interface FieldErrorProps {
 /** A validation message, linked to its control by id. */
 export function FieldError({ id, children, className }: FieldErrorProps) {
   return (
-    <p id={id} className={cx("flex items-start gap-1.5 text-sm font-medium text-danger", className)}>
+    <p id={id} className={cx("flex items-start gap-1.5 text-sm font-medium text-danger-text", className)}>
       <AlertCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
       <span>{children}</span>
     </p>
@@ -111,7 +111,7 @@ export function FieldError({ id, children, className }: FieldErrorProps) {
 /** Marks a label as required. Hidden from screen readers, which hear the control's `required`. */
 export function RequiredMark() {
   return (
-    <span aria-hidden="true" className="ml-0.5 text-danger">
+    <span aria-hidden="true" className="ml-0.5 text-danger-text">
       *
     </span>
   );

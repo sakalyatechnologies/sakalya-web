@@ -87,7 +87,7 @@ export function Menu<Id extends string>({
                   className={cx(
                     "flex cursor-default items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium outline-none select-none",
                     "data-highlighted:bg-surface-muted data-disabled:opacity-50",
-                    item.danger === true ? "text-danger" : "text-text",
+                    item.danger === true ? "text-danger-text" : "text-text",
                   )}
                 >
                   {item.icon !== undefined ? (

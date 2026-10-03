@@ -12,7 +12,7 @@ export interface ButtonProps extends ComponentProps<"button"> {
 const BUTTON: Readonly<Record<ButtonVariant, string>> = {
   primary: "bg-primary text-on-primary hover:bg-primary-hover shadow-sm",
   secondary: "bg-surface text-text border border-border hover:bg-surface-muted",
-  ghost: "text-primary hover:bg-primary-soft",
+  ghost: "text-primary-text hover:bg-primary-soft",
 };
 
 /** A button in one of three variants, with an optional leading icon. */
@@ -57,7 +57,7 @@ export function IconButton({ label, badge, children, className, type = "button",
     >
       {children}
       {badge ? (
-        <span className="absolute -right-1 -top-1 flex min-w-5 items-center justify-center rounded-full bg-danger px-1 text-[11px] font-bold text-white">
+        <span className="absolute -right-1 -top-1 flex min-w-5 items-center justify-center rounded-full bg-danger px-1 text-[11px] font-bold text-on-danger">
           {badge}
         </span>
       ) : null}
@@ -120,7 +120,7 @@ export function Avatar({ name, imageUrl, size = "md" }: AvatarProps) {
     return <img src={imageUrl} alt={name} className={cx("shrink-0 rounded-full object-cover", dimension)} />;
   }
   return (
-    <span role="img" aria-label={name} className={cx("inline-flex shrink-0 items-center justify-center rounded-full bg-primary-soft font-bold text-primary", dimension)}>
+    <span role="img" aria-label={name} className={cx("inline-flex shrink-0 items-center justify-center rounded-full bg-primary-soft font-bold text-primary-text", dimension)}>
       {initials}
     </span>
   );

@@ -39,6 +39,8 @@ export interface Theme {
     primary: HexColor;
     primaryHover: HexColor;
     primarySoft: HexColor;
+    /** Accent-coloured text, such as links: readable on cards and on `primarySoft`. */
+    primaryText: HexColor;
     onPrimary: HexColor;
     background: HexColor;
     surface: HexColor;
@@ -54,14 +56,26 @@ export interface Theme {
     sidebarText: HexColor;
     sidebarActive: HexColor;
     sidebarActiveText: HexColor;
+    /** Status colours for icons, dots and outlines (3:1 on cards). */
     success: HexColor;
+    /** Status tints for pill and banner backgrounds. */
     successSoft: HexColor;
+    /** Status text: readable (4.5:1) on its tint and on cards. */
+    successText: HexColor;
+    /** Text on a solid status background. */
+    onSuccess: HexColor;
     warning: HexColor;
     warningSoft: HexColor;
+    warningText: HexColor;
+    onWarning: HexColor;
     danger: HexColor;
     dangerSoft: HexColor;
+    dangerText: HexColor;
+    onDanger: HexColor;
     info: HexColor;
     infoSoft: HexColor;
+    infoText: HexColor;
+    onInfo: HexColor;
     chart1: HexColor;
     chart2: HexColor;
     chart3: HexColor;
@@ -78,6 +92,50 @@ const STATUS = {
 } as const;
 
 const DARK_BASE = hex("#0b1015");
+
+type StatusName = "success" | "warning" | "danger" | "info";
+
+type StatusTokens = Pick<
+  Theme["colors"],
+  | StatusName
+  | `${StatusName}Soft`
+  | `${StatusName}Text`
+  | "onSuccess"
+  | "onWarning"
+  | "onDanger"
+  | "onInfo"
+>;
+
+/**
+ * Each status gets its colour, a tint, text that reads on the tint (and so on cards, which are
+ * further from the text colour), and a label colour for the solid colour.
+ */
+function statusTokens(colors: Record<StatusName, HexColor>, tint: (color: HexColor) => HexColor): StatusTokens {
+  const tints = {
+    success: tint(colors.success),
+    warning: tint(colors.warning),
+    danger: tint(colors.danger),
+    info: tint(colors.info),
+  };
+  return {
+    success: colors.success,
+    successSoft: tints.success,
+    successText: ensureContrast(colors.success, tints.success, AA_TEXT),
+    onSuccess: readableOn(colors.success),
+    warning: colors.warning,
+    warningSoft: tints.warning,
+    warningText: ensureContrast(colors.warning, tints.warning, AA_TEXT),
+    onWarning: readableOn(colors.warning),
+    danger: colors.danger,
+    dangerSoft: tints.danger,
+    dangerText: ensureContrast(colors.danger, tints.danger, AA_TEXT),
+    onDanger: readableOn(colors.danger),
+    info: colors.info,
+    infoSoft: tints.info,
+    infoText: ensureContrast(colors.info, tints.info, AA_TEXT),
+    onInfo: readableOn(colors.info),
+  };
+}
 
 /** Derives the full palette from a brand colour. */
 export function createTheme(input: ThemeInput): Theme {
@@ -100,13 +158,13 @@ function lightColors(brand: HexColor): Theme["colors"] {
   // visible on white cards, which a light brand with ink labels would not.
   const onPrimary = WHITE;
   const primary = ensureContrast(brand, onPrimary, AA_TEXT);
-  const status = STATUS.light;
   const primarySoft = lighten(brand, 0.86);
   return {
     brand,
     primary,
     primaryHover: darken(primary, 0.1),
     primarySoft,
+    primaryText: ensureContrast(primary, primarySoft, AA_TEXT),
     onPrimary,
     background,
     surface,
@@ -120,14 +178,7 @@ function lightColors(brand: HexColor): Theme["colors"] {
     sidebarText: mix(brand, hex("#334155"), 0.15),
     sidebarActive: primarySoft,
     sidebarActiveText: ensureContrast(darken(brand, 0.35), primarySoft, AA_TEXT),
-    success: status.success,
-    successSoft: lighten(status.success, 0.88),
-    warning: status.warning,
-    warningSoft: lighten(status.warning, 0.88),
-    danger: status.danger,
-    dangerSoft: lighten(status.danger, 0.9),
-    info: status.info,
-    infoSoft: lighten(status.info, 0.9),
+    ...statusTokens(STATUS.light, (color) => lighten(color, 0.89)),
     chart1: primary,
     chart2: lighten(brand, 0.45),
     chart3: darken(brand, 0.3),
@@ -147,13 +198,13 @@ function darkColors(brand: HexColor): Theme["colors"] {
     readableOn(lifted) === WHITE && contrastRatio(withWhite, surface) >= AA_UI;
   const onPrimary = whiteWorks ? WHITE : INK;
   const primary = whiteWorks ? withWhite : ensureContrast(lifted, INK, AA_TEXT);
-  const status = STATUS.dark;
   const primarySoft = mix(brand, surface, 0.22);
   return {
     brand,
     primary,
     primaryHover: lighten(primary, 0.1),
     primarySoft,
+    primaryText: ensureContrast(primary, primarySoft, AA_TEXT),
     onPrimary,
     background,
     surface,
@@ -167,14 +218,7 @@ function darkColors(brand: HexColor): Theme["colors"] {
     sidebarText: hex("#c3cdd8"),
     sidebarActive: primarySoft,
     sidebarActiveText: ensureContrast(lighten(brand, 0.45), primarySoft, AA_TEXT),
-    success: status.success,
-    successSoft: mix(status.success, surface, 0.16),
-    warning: status.warning,
-    warningSoft: mix(status.warning, surface, 0.16),
-    danger: status.danger,
-    dangerSoft: mix(status.danger, surface, 0.16),
-    info: status.info,
-    infoSoft: mix(status.info, surface, 0.16),
+    ...statusTokens(STATUS.dark, (color) => mix(color, surface, 0.16)),
     chart1: primary,
     chart2: mix(brand, surface, 0.55),
     chart3: lighten(brand, 0.35),
