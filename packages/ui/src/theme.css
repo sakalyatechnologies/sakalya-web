@@ -17,6 +17,7 @@
   --color-background: var(--sk-background);
   --color-surface: var(--sk-surface);
   --color-surface-muted: var(--sk-surface-muted);
+  --color-scrim: var(--sk-scrim);
   --color-border: var(--sk-border);
   --color-border-strong: var(--sk-border-strong);
   --color-text: var(--sk-text);

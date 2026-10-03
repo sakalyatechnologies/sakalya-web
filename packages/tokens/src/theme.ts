@@ -43,6 +43,8 @@ export interface Theme {
     background: HexColor;
     surface: HexColor;
     surfaceMuted: HexColor;
+    /** Dims the page behind dialogs and drawers; used with transparency. */
+    scrim: HexColor;
     border: HexColor;
     /** Outlines that identify a control, such as a text field: at least 3:1 against cards. */
     borderStrong: HexColor;
@@ -109,6 +111,7 @@ function lightColors(brand: HexColor): Theme["colors"] {
     background,
     surface,
     surfaceMuted: mix(brand, WHITE, 0.05),
+    scrim: INK,
     border: mix(brand, hex("#e2e8f0"), 0.12),
     borderStrong: ensureContrast(mix(brand, hex("#94a3b8"), 0.1), surface, AA_UI),
     text,
@@ -155,6 +158,7 @@ function darkColors(brand: HexColor): Theme["colors"] {
     background,
     surface,
     surfaceMuted: mix(brand, hex("#18212a"), 0.08),
+    scrim: hex("#000000"),
     border: mix(brand, hex("#263241"), 0.12),
     borderStrong: ensureContrast(mix(brand, hex("#4b5b6e"), 0.1), surface, AA_UI),
     text,

@@ -12,6 +12,8 @@ export {
   type SortState,
   type SortValue,
 } from "./components/data-table.js";
+export { Dialog, type DialogProps } from "./components/dialog.js";
+export { Drawer, type DrawerProps } from "./components/drawer.js";
 export { EmptyState, Skeleton, type EmptyStateProps, type SkeletonProps, type SkeletonShape } from "./components/feedback.js";
 export { Field, useFieldControl, type FieldControl, type FieldControlProps, type FieldProps } from "./components/field.js";
 export { FormActions, type FormActionsProps } from "./components/form-actions.js";
@@ -38,6 +40,8 @@ export {
   type TimelineItem,
   type TimelineProps,
 } from "./components/lists.js";
+export { Menu, type MenuItem, type MenuProps } from "./components/menu.js";
+export { type OverlaySize } from "./components/overlay-parts.js";
 export { Pagination, type PaginationLabels, type PaginationProps } from "./components/pagination.js";
 export {
   Avatar,
@@ -53,5 +57,13 @@ export {
   type PillProps,
 } from "./components/primitives.js";
 export { Select, type SelectOption, type SelectProps } from "./components/select.js";
-export { ThemeScope, type ThemeScopeProps } from "./components/theme-scope.js";
+export { ThemeScope, usePortalTheme, type PortalThemeProps, type ThemeScopeProps } from "./components/theme-scope.js";
+export {
+  ToastProvider,
+  useToast,
+  type ToastApi,
+  type ToastOptions,
+  type ToastProviderProps,
+  type ToastTone,
+} from "./components/toast.js";
 export { cx, type Tone } from "./cx.js";

@@ -1,10 +1,10 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 import { TONE_CLASSES, cx, type Tone } from "../cx.js";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost";
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ComponentProps<"button"> {
   variant?: ButtonVariant;
   icon?: ReactNode;
 }
@@ -34,7 +34,7 @@ export function Button({ variant = "primary", icon, className, children, type = 
   );
 }
 
-export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IconButtonProps extends ComponentProps<"button"> {
   /** Accessible name; icon buttons have no visible text. */
   label: string;
   /** A count shown as a badge, such as unread notifications. */
