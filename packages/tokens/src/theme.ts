@@ -44,6 +44,8 @@ export interface Theme {
     surface: HexColor;
     surfaceMuted: HexColor;
     border: HexColor;
+    /** Outlines that identify a control, such as a text field: at least 3:1 against cards. */
+    borderStrong: HexColor;
     text: HexColor;
     textMuted: HexColor;
     sidebar: HexColor;
@@ -108,6 +110,7 @@ function lightColors(brand: HexColor): Theme["colors"] {
     surface,
     surfaceMuted: mix(brand, WHITE, 0.05),
     border: mix(brand, hex("#e2e8f0"), 0.12),
+    borderStrong: ensureContrast(mix(brand, hex("#94a3b8"), 0.1), surface, AA_UI),
     text,
     textMuted: mix(brand, hex("#55657a"), 0.1),
     sidebar: mix(brand, WHITE, 0.06),
@@ -153,6 +156,7 @@ function darkColors(brand: HexColor): Theme["colors"] {
     surface,
     surfaceMuted: mix(brand, hex("#18212a"), 0.08),
     border: mix(brand, hex("#263241"), 0.12),
+    borderStrong: ensureContrast(mix(brand, hex("#4b5b6e"), 0.1), surface, AA_UI),
     text,
     textMuted: hex("#97a6b6"),
     sidebar: mix(brand, DARK_BASE, 0.08),

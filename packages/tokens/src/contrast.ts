@@ -43,6 +43,7 @@ const CHECKS: readonly Check[] = [
     required: 4.5,
   },
   { label: "Buttons against cards", foreground: "primary", background: "surface", required: 3 },
+  { label: "Form field outlines against cards", foreground: "borderStrong", background: "surface", required: 3 },
 ];
 
 /** Returns every pairing in `theme` that falls short of WCAG AA, worst first. */
