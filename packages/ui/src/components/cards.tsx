@@ -60,13 +60,15 @@ export interface StatCardProps {
   icon: ReactNode;
   tone?: Tone;
   trend?: Trend;
+  /** A short trend line, oldest value first. Rendered small, under the trend and above the footer. */
+  sparkline?: readonly number[];
   /** Extra content under the value, such as a breakdown or a short list. */
   footer?: ReactNode;
   href?: string;
 }
 
-/** A headline number with an icon, an optional trend and footer. */
-export function StatCard({ label, value, icon, tone = "primary", trend, footer, href }: StatCardProps) {
+/** A headline number with an icon, an optional trend, sparkline and footer. */
+export function StatCard({ label, value, icon, tone = "primary", trend, sparkline, footer, href }: StatCardProps) {
   const body = (
     <div className="flex items-start gap-4">
       <IconBubble tone={tone} size="lg">
@@ -76,6 +78,7 @@ export function StatCard({ label, value, icon, tone = "primary", trend, footer, 
         <p className="text-sm font-semibold text-muted">{label}</p>
         <p className="mt-1 text-3xl font-extrabold tracking-tight text-text tabular-nums">{value}</p>
         {trend ? <TrendLine trend={trend} /> : null}
+        {sparkline !== undefined && sparkline.length > 1 ? <Sparkline values={sparkline} tone={tone} /> : null}
         {footer ? <div className="mt-3">{footer}</div> : null}
       </div>
       {href ? <ChevronRight aria-hidden="true" className="mt-1 size-5 text-muted" /> : null}
@@ -88,6 +91,39 @@ export function StatCard({ label, value, icon, tone = "primary", trend, footer, 
     </Link>
   ) : (
     <section className={shell}>{body}</section>
+  );
+}
+
+const SPARKLINE_STROKE: Readonly<Record<Tone, string>> = {
+  neutral: "stroke-muted",
+  primary: "stroke-primary",
+  success: "stroke-success",
+  warning: "stroke-warning",
+  danger: "stroke-danger",
+  info: "stroke-info",
+};
+
+/** A tiny trend line, oldest value first, scaled to its own range so a flat-looking trend still shows motion. */
+function Sparkline({ values, tone }: { values: readonly number[]; tone: Tone }) {
+  const width = 96;
+  const height = 28;
+  const safe = values.map((value) => (Number.isFinite(value) ? value : 0));
+  const min = Math.min(...safe);
+  const max = Math.max(...safe);
+  const range = max - min || 1;
+  const step = width / (safe.length - 1);
+  const points = safe.map((value, index) => `${String(index * step)},${String(height - ((value - min) / range) * height)}`).join(" ");
+  return (
+    <svg aria-hidden="true" viewBox={`0 0 ${String(width)} ${String(height)}`} className="mt-2 block h-7 w-24">
+      <polyline
+        points={points}
+        fill="none"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={SPARKLINE_STROKE[tone]}
+      />
+    </svg>
   );
 }
 

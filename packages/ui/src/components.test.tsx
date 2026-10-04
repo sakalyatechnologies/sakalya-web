@@ -39,6 +39,18 @@ describe("StatCard", () => {
     expect(screen.getByText("₹28,500")).toBeTruthy();
     expect(screen.getByText("18% vs yesterday").className).toContain("text-success");
   });
+
+  it("draws a sparkline when given a trend of values", () => {
+    const { container } = render(
+      <StatCard label="Appointments" value="42" icon={<span>#</span>} sparkline={[5, 8, 6, 9, 12]} />,
+    );
+    expect(container.querySelector("svg polyline")).toBeTruthy();
+  });
+
+  it("skips the sparkline for a single value, which has no trend to show", () => {
+    const { container } = render(<StatCard label="Appointments" value="42" icon={<span>#</span>} sparkline={[5]} />);
+    expect(container.querySelector("svg polyline")).toBeNull();
+  });
 });
 
 describe("IconButton", () => {
