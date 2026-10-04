@@ -118,4 +118,11 @@ export {
   type ToastProviderProps,
   type ToastTone,
 } from "./components/toast.js";
+export {
+  WeekGrid,
+  type WeekGridBlock,
+  type WeekGridDay,
+  type WeekGridLabels,
+  type WeekGridProps,
+} from "./components/week-grid.js";
 export { cx, type Tone } from "./cx.js";
