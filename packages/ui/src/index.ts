@@ -44,6 +44,15 @@ export {
   type SortValue,
 } from "./components/data-table.js";
 export { Dialog, type DialogProps } from "./components/dialog.js";
+export {
+  DonutChart,
+  cleanDonutData,
+  type CleanDonutData,
+  type DonutChartProps,
+  type DonutDataIssue,
+  type DonutDataProblem,
+  type DonutDatum,
+} from "./components/donut-chart.js";
 export { Drawer, type DrawerProps } from "./components/drawer.js";
 export {
   EmptyState,
