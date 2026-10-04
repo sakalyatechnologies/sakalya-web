@@ -248,6 +248,20 @@ describe("Toast", () => {
     });
   });
 
+  it("can show a dark one-line pill centred at the bottom", async () => {
+    const user = userEvent.setup();
+    render(
+      <ThemeScope theme={theme}>
+        <ToastProvider appearance="pill">
+          <SaveButton />
+        </ToastProvider>
+      </ThemeScope>,
+    );
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    const title = await screen.findByText("Member added");
+    expect(title.closest("[class*='-translate-x-1/2']")).not.toBeNull();
+  });
+
   it("explains the mistake when used outside a provider", () => {
     vi.spyOn(console, "error").mockImplementation(() => undefined);
     expect(() => render(<SaveButton />)).toThrow("useToast must be called inside a ToastProvider");

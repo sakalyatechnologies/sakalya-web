@@ -113,6 +113,7 @@ export { ThemeScope, usePortalTheme, type PortalThemeProps, type ThemeScopeProps
 export {
   ToastProvider,
   useToast,
+  type ToastAppearance,
   type ToastApi,
   type ToastOptions,
   type ToastProviderProps,
