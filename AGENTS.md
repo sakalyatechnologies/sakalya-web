@@ -30,7 +30,8 @@ Nothing here may mention a product concept (patient, clinic, society). Component
 5. **No `console.log`.** Libraries don't log.
 6. **Components are presentational.** No data fetching inside `@sakalya/ui`; products pass data in.
 7. **Small packages, explicit exports.** Each package exports from `src/index.ts`. No default exports.
-8. **Tests prove behaviour:** theme maths and contrast rules in `@sakalya/tokens`; rendering and interaction in `@sakalya/ui` with Testing Library.
+8. **Tests prove behaviour:** theme maths and contrast rules in `@sakalya/tokens`; rendering and interaction in `@sakalya/ui` with Testing Library; every new component also goes into the axe check in `packages/ui/src/a11y.test.tsx`.
+10. **Overlays keep the theme.** Anything rendered in a portal spreads `usePortalTheme()` onto its portal element; links go through `Link` so products can route them.
 9. **Ask before adding a dependency,** and justify it in the commit message.
 
 ## Hooks
