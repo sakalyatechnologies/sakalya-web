@@ -6,4 +6,6 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 // SINGLE_FILE=1 inlines everything into one HTML file, for sharing as a static page.
 export default defineConfig({
   plugins: [react(), tailwindcss(), ...(process.env["SINGLE_FILE"] ? [viteSingleFile()] : [])],
+  // The gallery is one demo page; products split their own bundles.
+  build: { chunkSizeWarningLimit: 800 },
 });

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
 import {
   PRESETS,
@@ -7,21 +7,74 @@ import {
   parseHexColor,
   type HexColor,
   type Preset,
+  type Theme,
   type ThemeMode,
 } from "@sakalya/tokens";
-import { ThemeScope } from "@sakalya/ui";
+import { ThemeScope, ToastProvider } from "@sakalya/ui";
 
+import { Catalogue } from "./catalogue.js";
 import { SampleDashboard } from "./sample-dashboard.js";
+import { SampleForm } from "./sample-form.js";
+import { SampleTable } from "./sample-table.js";
 
 const FIRST_PRESET: Preset | undefined = PRESETS[0];
 
-/** The gallery: theme controls above a sample screen rendered with the chosen theme. */
+type Page = "components" | "form" | "table" | "dashboard";
+
+const PAGES: readonly { key: Page; label: string }[] = [
+  { key: "components", label: "Components" },
+  { key: "form", label: "Sample form" },
+  { key: "table", label: "Sample table" },
+  { key: "dashboard", label: "Sample dashboard" },
+];
+
+function PageContent({ page }: { page: Page }) {
+  switch (page) {
+    case "components":
+      return <Catalogue />;
+    case "form":
+      return <SampleForm />;
+    case "table":
+      return <SampleTable />;
+    case "dashboard":
+      return <SampleDashboard />;
+  }
+}
+
+/** Start-up state from the URL, such as `?page=table&mode=dark&compare=1`, for sharing a view. */
+const params = new URLSearchParams(window.location.search);
+const START_PAGE: Page = PAGES.find((entry) => entry.key === params.get("page"))?.key ?? "components";
+const START_MODE: ThemeMode = params.get("mode") === "dark" ? "dark" : "light";
+const START_COMPARE = params.get("compare") === "1";
+
+/** One themed copy of the page, with its own toasts so they carry its theme. */
+function Themed({ theme, caption, children }: { theme: Theme; caption?: string; children: ReactNode }) {
+  return (
+    <ThemeScope theme={theme} className="min-h-full">
+      <ToastProvider>
+        {caption !== undefined ? <p className="px-6 pt-4 text-xs font-bold uppercase tracking-wide text-muted">{caption}</p> : null}
+        {children}
+      </ToastProvider>
+    </ThemeScope>
+  );
+}
+
+function pillClass(pressed: boolean): string {
+  return pressed
+    ? "inline-flex items-center gap-2 rounded-full border border-slate-900 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white"
+    : "inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold";
+}
+
+/** The gallery: theme controls above a page rendered with the chosen theme. */
 export function App() {
+  const [page, setPage] = useState<Page>(START_PAGE);
   const [presetKey, setPresetKey] = useState(FIRST_PRESET?.key ?? "mint");
   const [custom, setCustom] = useState("");
-  const [mode, setMode] = useState<ThemeMode>("light");
+  const [mode, setMode] = useState<ThemeMode>(START_MODE);
+  const [compare, setCompare] = useState(START_COMPARE);
 
   const active = PRESETS.find((p) => p.key === presetKey) ?? FIRST_PRESET;
+  const second = PRESETS.find((p) => p.key === (active?.key === "lotus" ? "ocean" : "lotus"));
   const customColor: HexColor | null = custom === "" ? null : parseHexColor(custom);
   const brand = customColor ?? active?.brand;
 
@@ -34,15 +87,47 @@ export function App() {
   );
   const issues = theme ? checkContrast(theme) : [];
 
-  if (theme === null) {
+  if (theme === null || brand === undefined) {
     return null;
   }
+
+  const shown = [
+    { name: customColor === null ? (active?.name ?? "Custom") : "Custom", brand, preset: active },
+    ...(second === undefined ? [] : [{ name: second.name, brand: second.brand, preset: second }]),
+  ];
+  const names = shown.map((variant) => variant.name);
+  const variants = shown.flatMap((variant) =>
+    (["light", "dark"] as const).map((variantMode) => ({
+      caption: `${variant.name} · ${variantMode}`,
+      theme: createTheme({
+        brand: variant.brand,
+        mode: variantMode,
+        radius: variant.preset?.radius ?? 16,
+        surface: variant.preset?.surface ?? "soft",
+      }),
+    })),
+  );
 
   return (
     <div className="min-h-full bg-slate-100 text-slate-900">
       <div className="border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
         <div className="mx-auto flex max-w-[1500px] flex-wrap items-center gap-x-6 gap-y-3">
           <p className="text-sm font-bold">Sakalya Web Gallery</p>
+          <nav aria-label="Gallery pages" className="flex flex-wrap gap-2">
+            {PAGES.map((entry) => (
+              <button
+                key={entry.key}
+                type="button"
+                aria-pressed={page === entry.key}
+                onClick={() => {
+                  setPage(entry.key);
+                }}
+                className={pillClass(page === entry.key)}
+              >
+                {entry.label}
+              </button>
+            ))}
+          </nav>
           <fieldset className="flex flex-wrap items-center gap-2">
             <legend className="sr-only">Theme preset</legend>
             {PRESETS.map((p) => (
@@ -55,7 +140,7 @@ export function App() {
                   setPresetKey(p.key);
                   setCustom("");
                 }}
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold aria-pressed:border-slate-900 aria-pressed:bg-slate-900 aria-pressed:text-white"
+                className={pillClass(p.key === presetKey && customColor === null)}
               >
                 <span aria-hidden="true" className="size-3 rounded-full" style={{ background: p.brand }} />
                 {p.name}
@@ -80,9 +165,19 @@ export function App() {
             onClick={() => {
               setMode(mode === "light" ? "dark" : "light");
             }}
-            className="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold"
+            className={pillClass(false)}
           >
             {mode === "light" ? "Switch to dark" : "Switch to light"}
+          </button>
+          <button
+            type="button"
+            aria-pressed={compare}
+            onClick={() => {
+              setCompare(!compare);
+            }}
+            className={pillClass(compare)}
+          >
+            Side by side: {names.join(" and ")}, light and dark
           </button>
           <p className="text-xs text-slate-600" role="status">
             {issues.length === 0
@@ -91,9 +186,19 @@ export function App() {
           </p>
         </div>
       </div>
-      <ThemeScope theme={theme} className="min-h-[calc(100%-57px)]">
-        <SampleDashboard />
-      </ThemeScope>
+      {compare ? (
+        <div className="grid gap-px bg-slate-300 xl:grid-cols-2">
+          {variants.map((variant) => (
+            <Themed key={variant.caption} theme={variant.theme} caption={variant.caption}>
+              <PageContent page={page} />
+            </Themed>
+          ))}
+        </div>
+      ) : (
+        <Themed theme={theme}>
+          <PageContent page={page} />
+        </Themed>
+      )}
     </div>
   );
 }
