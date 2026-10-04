@@ -20,6 +20,11 @@ export {
 } from "./components/bar-chart.js";
 export { Card, CardLink, StatCard, type CardLinkProps, type CardProps, type StatCardProps, type Trend } from "./components/cards.js";
 export {
+  ChipFilterGroup,
+  type ChipFilterGroupProps,
+  type ChipFilterOption,
+} from "./components/chip-filter-group.js";
+export {
   Checkbox,
   RadioGroup,
   Switch,
