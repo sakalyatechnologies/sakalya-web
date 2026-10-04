@@ -141,7 +141,9 @@ export function DataTable<Row>({
   const sorted = sort !== null && sortColumn !== undefined ? sortRows(rows, sortColumn, sort.direction) : rows;
   const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
   const page = Math.min(Math.max(1, pageProp ?? ownPage), pageCount);
-  const first = (page - 1) * pageSize;
+  // `(1 - 1) * Infinity` is `NaN`, not 0, which would slice away every row when `pageSize` is
+  // `Infinity`; page 1 always starts at 0 regardless of page size.
+  const first = page === 1 ? 0 : (page - 1) * pageSize;
   const pageRows = sorted.slice(first, first + pageSize);
 
   const changePage = (next: number) => {

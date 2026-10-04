@@ -136,6 +136,12 @@ describe("DataTable", () => {
     expect(screen.getByText("Page 1 of 3")).toBeTruthy();
   });
 
+  it("shows every row when pageSize is Infinity", () => {
+    render(<DataTable caption="Members" columns={COLUMNS} rows={many(23)} rowKey={(member) => member.id} pageSize={Infinity} />);
+    expect(rowNames()).toHaveLength(23);
+    expect(screen.queryByRole("navigation")).toBeNull();
+  });
+
   it("hides the pagination when everything fits on one page", () => {
     render(<DataTable caption="Members" columns={COLUMNS} rows={FEW} rowKey={(member) => member.id} />);
     expect(screen.queryByRole("navigation")).toBeNull();
