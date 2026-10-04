@@ -76,6 +76,7 @@ export {
   type TimelineProps,
 } from "./components/lists.js";
 export { Menu, type MenuItem, type MenuProps } from "./components/menu.js";
+export { Meter, type MeterProps } from "./components/meter.js";
 export { type OverlaySize } from "./components/overlay-parts.js";
 export { Pagination, type PaginationLabels, type PaginationProps } from "./components/pagination.js";
 export {
