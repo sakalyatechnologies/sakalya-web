@@ -9,9 +9,11 @@ import {
   Button,
   Card,
   Checkbox,
+  ChipFilterGroup,
   DataTable,
   DateInput,
   Dialog,
+  DonutChart,
   Drawer,
   EmptyState,
   ErrorState,
@@ -19,6 +21,7 @@ import {
   FormActions,
   IconButton,
   Menu,
+  Meter,
   Pagination,
   PhoneInput,
   Pill,
@@ -26,9 +29,12 @@ import {
   SearchInput,
   Select,
   Skeleton,
+  StatCard,
+  Switch,
   Tabs,
   TextArea,
   TextInput,
+  WeekGrid,
   useToast,
   type Tone,
   type ToastTone,
@@ -171,9 +177,61 @@ function Overlays() {
   );
 }
 
+function StatCards() {
+  return (
+    <Section title="Stat cards">
+      <div className="grid gap-4 sm:grid-cols-3">
+        <StatCard
+          label="Appointments today"
+          value="42"
+          icon={<span>#</span>}
+          trend={{ label: "12% vs yesterday", direction: "up", good: true }}
+          sparkline={[28, 31, 35, 30, 38, 42]}
+        />
+        <StatCard label="Waiting" value="3" icon={<span>⏱</span>} tone="warning" />
+        <StatCard
+          label="Collected"
+          value="₹28,500"
+          icon={<span>₹</span>}
+          tone="success"
+          trend={{ label: "18% vs yesterday", direction: "up", good: true }}
+          href="#billing"
+        />
+      </div>
+    </Section>
+  );
+}
+
+function Schedule() {
+  return (
+    <Section title="Schedule">
+      <WeekGrid
+        days={[
+          { id: "mon", label: "Mon", dateLabel: "12" },
+          { id: "tue", label: "Tue", dateLabel: "13" },
+          { id: "wed", label: "Wed", dateLabel: "14" },
+          { id: "thu", label: "Thu", dateLabel: "15" },
+          { id: "fri", label: "Fri", dateLabel: "16", current: true },
+        ]}
+        startHour={9}
+        endHour={17}
+        summary="This week's appointments"
+        onBlockSelect={() => undefined}
+        blocks={[
+          { id: "a1", dayId: "mon", start: 9.5, duration: 1, label: "Root canal", subtitle: "Room 1", tone: "primary" },
+          { id: "a2", dayId: "mon", start: 11, duration: 0.5, label: "Cleaning", tone: "success" },
+          { id: "a3", dayId: "wed", start: 10, duration: 1.5, label: "Braces", subtitle: "Room 2", tone: "warning" },
+          { id: "a4", dayId: "fri", start: 14, duration: 1, label: "New consult", tone: "info" },
+        ]}
+      />
+    </Section>
+  );
+}
+
 function DataDisplay() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(2);
+  const [filter, setFilter] = useState<readonly string[]>(["all"]);
   return (
     <Section title="Data display">
       <Tabs
@@ -229,6 +287,34 @@ function DataDisplay() {
           categoryLabel="Day"
           summary="Planned and done tasks by day, busiest on Tuesday"
         />
+      </div>
+      <div className="max-w-sm">
+        <DonutChart
+          data={[
+            { label: "Restorative", value: 30 },
+            { label: "Ortho", value: 20 },
+            { label: "Surgical", value: 15 },
+            { label: "Consults", value: 35 },
+          ]}
+          summary="Revenue mix this week"
+          centerValue="₹1.2L"
+          centerLabel="this week"
+        />
+      </div>
+      <ChipFilterGroup
+        label="Filter members"
+        value={filter}
+        onValueChange={setFilter}
+        options={[
+          { value: "all", label: "All" },
+          { value: "balance", label: "With balance" },
+          { value: "recalls", label: "Recalls due" },
+          { value: "new", label: "New this month" },
+        ]}
+      />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Meter label="Composite A2 stock" value={28} max={40} lowAt={8} />
+        <Meter label="Gloves (box)" value={4} max={40} lowAt={8} />
       </div>
     </Section>
   );
@@ -319,6 +405,8 @@ export function Catalogue() {
           />
           <Checkbox label="Send reminders" hint="The day before" defaultChecked />
           <Checkbox label="I accept the terms" error="Accept the terms to continue" />
+          <Switch label="Low-stock alerts" hint="Email the owner when stock runs low" defaultChecked />
+          <Switch label="Quiet hours" disabled />
         </div>
         <FormActions>
           <Button variant="secondary">Cancel</Button>
@@ -326,7 +414,9 @@ export function Catalogue() {
         </FormActions>
       </Section>
       <Overlays />
+      <StatCards />
       <DataDisplay />
+      <Schedule />
     </div>
   );
 }

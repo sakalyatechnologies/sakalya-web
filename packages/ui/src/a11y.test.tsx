@@ -13,15 +13,18 @@ import {
   Card,
   CardLink,
   Checkbox,
+  ChipFilterGroup,
   DataTable,
   DateInput,
   Dialog,
+  DonutChart,
   Drawer,
   EmptyState,
   ErrorState,
   Field,
   FormActions,
   Menu,
+  Meter,
   Pagination,
   PhoneInput,
   RadioGroup,
@@ -29,10 +32,12 @@ import {
   Select,
   Skeleton,
   StatCard,
+  Switch,
   Tabs,
   TextArea,
   TextInput,
   ThemeScope,
+  WeekGrid,
 } from "./index.js";
 
 afterEach(cleanup);
@@ -122,8 +127,38 @@ function Catalogue() {
         <Pagination page={2} pageCount={5} onPageChange={noop} summary="Showing 11–20 of 42" />
         <Tabs label="Views" items={[{ value: "a", label: "All", content: <p>All</p> }, { value: "b", label: "Mine", content: <p>Mine</p> }]} />
         <SearchInput label="Search members" value="" onValueChange={noop} />
-        <StatCard label="Open items" value="12" icon={<span>#</span>} href="#open" trend={{ label: "3 more", direction: "up", good: false }} />
+        <StatCard
+          label="Open items"
+          value="12"
+          icon={<span>#</span>}
+          href="#open"
+          trend={{ label: "3 more", direction: "up", good: false }}
+          sparkline={[3, 5, 4, 7, 6, 9]}
+        />
         <BarChart data={[{ label: "Mon", total: 4, part: 3 }]} totalLabel="Booked" partLabel="Done" summary="Bookings this week" />
+        <DonutChart data={[{ label: "Restorative", value: 30 }, { label: "Ortho", value: 20 }]} summary="Revenue mix" centerValue="₹50k" centerLabel="total" />
+        <Meter label="Composite A2 stock" value={4} max={40} lowAt={8} />
+        <Switch label="Low-stock alerts" hint="Email the owner" defaultChecked />
+        <ChipFilterGroup
+          label="Filter members"
+          options={[
+            { value: "all", label: "All" },
+            { value: "balance", label: "With balance" },
+          ]}
+          value={["all"]}
+          onValueChange={noop}
+        />
+        <WeekGrid
+          days={[
+            { id: "mon", label: "Mon", dateLabel: "12" },
+            { id: "tue", label: "Tue", dateLabel: "13", current: true },
+          ]}
+          startHour={9}
+          endHour={12}
+          blocks={[{ id: "a1", dayId: "mon", start: 9.5, duration: 1, label: "Root canal", tone: "primary" }]}
+          summary="This week's appointments"
+          onBlockSelect={noop}
+        />
         {(["soft", "solid", "outline"] as const).map((variant) => (
           <Badge key={variant} tone="danger" variant={variant}>
             {variant}
