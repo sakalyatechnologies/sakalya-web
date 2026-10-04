@@ -19,7 +19,15 @@ export {
   type CleanBarData,
 } from "./components/bar-chart.js";
 export { Card, CardLink, StatCard, type CardLinkProps, type CardProps, type StatCardProps, type Trend } from "./components/cards.js";
-export { Checkbox, RadioGroup, type CheckboxProps, type RadioGroupProps, type RadioOption } from "./components/choices.js";
+export {
+  Checkbox,
+  RadioGroup,
+  Switch,
+  type CheckboxProps,
+  type RadioGroupProps,
+  type RadioOption,
+  type SwitchProps,
+} from "./components/choices.js";
 export {
   DataTable,
   sortRows,

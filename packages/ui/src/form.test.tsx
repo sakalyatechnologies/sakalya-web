@@ -11,6 +11,7 @@ import {
   PhoneInput,
   RadioGroup,
   Select,
+  Switch,
   TextArea,
   TextInput,
   phoneDigits,
@@ -207,6 +208,34 @@ describe("RadioGroup", () => {
     expect(screen.getByRole("radio", { name: "Email", description: "Receipts and reminders" })).toBeTruthy();
     fireEvent.click(screen.getByRole("radio", { name: "Text message" }));
     expect(onValueChange).toHaveBeenCalledWith("sms");
+  });
+});
+
+describe("Switch", () => {
+  it("is named by its label, described by its hint, and reports toggles when uncontrolled", () => {
+    const onCheckedChange = vi.fn();
+    render(<Switch label="Low-stock alerts" hint="Email the owner" onCheckedChange={onCheckedChange} />);
+    const toggle = screen.getByRole("switch", { name: "Low-stock alerts", description: "Email the owner" });
+    expect(toggle.getAttribute("aria-checked")).toBe("false");
+    fireEvent.click(toggle);
+    expect(onCheckedChange).toHaveBeenCalledExactlyOnceWith(true);
+    expect(toggle.getAttribute("aria-checked")).toBe("true");
+  });
+
+  it("follows the product's value when controlled, without flipping itself", () => {
+    const onCheckedChange = vi.fn();
+    render(<Switch label="Recall reminders" checked={false} onCheckedChange={onCheckedChange} />);
+    const toggle = screen.getByRole("switch", { name: "Recall reminders" });
+    fireEvent.click(toggle);
+    expect(onCheckedChange).toHaveBeenCalledExactlyOnceWith(true);
+    expect(toggle.getAttribute("aria-checked")).toBe("false");
+  });
+
+  it("cannot be toggled while disabled", () => {
+    const onCheckedChange = vi.fn();
+    render(<Switch label="Quiet hours" disabled onCheckedChange={onCheckedChange} />);
+    fireEvent.click(screen.getByRole("switch", { name: "Quiet hours" }));
+    expect(onCheckedChange).not.toHaveBeenCalled();
   });
 });
 

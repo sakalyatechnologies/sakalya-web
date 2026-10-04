@@ -1,4 +1,4 @@
-import { useId, type ComponentProps, type ReactNode } from "react";
+import { useId, useState, type ComponentProps, type ReactNode } from "react";
 
 import { cx } from "../cx.js";
 import { FieldError, FieldHint, RequiredMark, joinIds } from "./field.js";
@@ -47,6 +47,70 @@ export function Checkbox({ label, hint, error, id, className, ...rest }: Checkbo
           {error}
         </FieldError>
       ) : null}
+    </div>
+  );
+}
+
+export interface SwitchProps {
+  /** The setting this turns on or off. */
+  label: ReactNode;
+  /** The state, when the product keeps it. Leave undefined to let the switch manage itself. */
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+  hint?: string | undefined;
+  disabled?: boolean;
+  className?: string;
+}
+
+/** A boolean on/off control, for a setting rather than a form field. */
+export function Switch({ label, checked, defaultChecked = false, onCheckedChange, hint, disabled = false, className }: SwitchProps) {
+  const generated = useId();
+  const labelId = `${generated}label`;
+  const hintId = `${generated}hint`;
+  const [own, setOwn] = useState(defaultChecked);
+  const isChecked = checked ?? own;
+  const hasHint = hint !== undefined && hint !== "";
+
+  const toggle = () => {
+    const next = !isChecked;
+    if (checked === undefined) {
+      setOwn(next);
+    }
+    onCheckedChange?.(next);
+  };
+
+  return (
+    <div className={cx("flex items-start justify-between gap-3", className)}>
+      <span className="flex min-w-0 flex-col">
+        <span id={labelId} className={cx("text-sm font-medium text-text", disabled && "opacity-60")}>
+          {label}
+        </span>
+        {hasHint ? <FieldHint id={hintId}>{hint}</FieldHint> : null}
+      </span>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={isChecked}
+        aria-labelledby={labelId}
+        aria-describedby={hasHint ? hintId : undefined}
+        disabled={disabled}
+        onClick={toggle}
+        className={cx(
+          "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+          "disabled:cursor-not-allowed disabled:opacity-50",
+          isChecked ? "bg-primary" : "bg-border-strong",
+        )}
+      >
+        <span
+          aria-hidden="true"
+          className={cx(
+            "inline-block size-5 translate-x-0.5 rounded-full bg-surface shadow transition-transform",
+            isChecked && "translate-x-[22px]",
+          )}
+        />
+      </button>
     </div>
   );
 }
