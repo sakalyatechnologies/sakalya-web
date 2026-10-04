@@ -1,8 +1,8 @@
-import { Inbox } from "lucide-react";
+import { AlertTriangle, Inbox } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { cx } from "../cx.js";
-import { IconBubble } from "./primitives.js";
+import { Button, IconBubble } from "./primitives.js";
 
 export type SkeletonShape = "line" | "circle" | "block";
 
@@ -56,6 +56,51 @@ export function EmptyState({ title, description, icon, action, className }: Empt
         <p className="max-w-sm text-sm text-muted">{description}</p>
       ) : null}
       {action !== undefined ? <div className="mt-3">{action}</div> : null}
+    </div>
+  );
+}
+
+export interface ErrorStateProps {
+  title?: string;
+  description?: string | undefined;
+  /** The failed request's id, shown so support can find it in the logs. */
+  requestId?: string | undefined;
+  /** Shows a retry button. */
+  onRetry?: () => void;
+  retryLabel?: string;
+  requestIdLabel?: string;
+  className?: string;
+}
+
+/** What to show when loading failed: what happened, a way to retry, and the request id. */
+export function ErrorState({
+  title = "Something went wrong",
+  description,
+  requestId,
+  onRetry,
+  retryLabel = "Try again",
+  requestIdLabel = "Request ID",
+  className,
+}: ErrorStateProps) {
+  return (
+    <div role="alert" className={cx("flex flex-col items-center gap-2 px-6 py-10 text-center", className)}>
+      <IconBubble tone="danger" size="lg">
+        <AlertTriangle className="size-7" />
+      </IconBubble>
+      <p className="mt-1 text-base font-bold text-text">{title}</p>
+      {description !== undefined && description !== "" ? (
+        <p className="max-w-sm text-sm text-muted">{description}</p>
+      ) : null}
+      {requestId !== undefined && requestId !== "" ? (
+        <p className="text-xs text-muted">
+          {requestIdLabel}: <code className="font-mono text-text select-all">{requestId}</code>
+        </p>
+      ) : null}
+      {onRetry !== undefined ? (
+        <Button variant="secondary" className="mt-3" onClick={onRetry}>
+          {retryLabel}
+        </Button>
+      ) : null}
     </div>
   );
 }

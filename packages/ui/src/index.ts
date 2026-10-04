@@ -8,6 +8,7 @@ export {
   type PageHeaderProps,
   type UserChipProps,
 } from "./components/app-shell.js";
+export { Badge, type BadgeProps, type BadgeVariant } from "./components/badge.js";
 export {
   BarChart,
   cleanBarData,
@@ -31,7 +32,15 @@ export {
 } from "./components/data-table.js";
 export { Dialog, type DialogProps } from "./components/dialog.js";
 export { Drawer, type DrawerProps } from "./components/drawer.js";
-export { EmptyState, Skeleton, type EmptyStateProps, type SkeletonProps, type SkeletonShape } from "./components/feedback.js";
+export {
+  EmptyState,
+  ErrorState,
+  Skeleton,
+  type EmptyStateProps,
+  type ErrorStateProps,
+  type SkeletonProps,
+  type SkeletonShape,
+} from "./components/feedback.js";
 export { Field, useFieldControl, type FieldControl, type FieldControlProps, type FieldProps } from "./components/field.js";
 export { FormActions, type FormActionsProps } from "./components/form-actions.js";
 export {
@@ -74,7 +83,9 @@ export {
   type IconButtonProps,
   type PillProps,
 } from "./components/primitives.js";
+export { SearchInput, type SearchInputProps } from "./components/search-input.js";
 export { Select, type SelectOption, type SelectProps } from "./components/select.js";
+export { Tabs, type TabItem, type TabsProps } from "./components/tabs.js";
 export { ThemeScope, usePortalTheme, type PortalThemeProps, type ThemeScopeProps } from "./components/theme-scope.js";
 export {
   ToastProvider,
