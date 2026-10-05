@@ -78,6 +78,14 @@ export {
   type TextInputProps,
   type TextInputType,
 } from "./components/inputs.js";
+export {
+  LineChart,
+  niceScale,
+  tickIndexes,
+  type LineChartProps,
+  type LineReference,
+  type LineSeries,
+} from "./components/line-chart.js";
 export { Link, LinkProvider, type LinkProps, type LinkProviderProps, type RenderLink } from "./components/link.js";
 export {
   AttentionList,
