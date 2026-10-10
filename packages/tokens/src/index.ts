@@ -15,4 +15,12 @@ export { checkContrast, type ContrastIssue, type IssueSeverity } from "./contras
 export { toCssText, toCssVariables, type CssVariables } from "./css.js";
 export { COLOR_TOKENS, MAX_RADIUS, parseTheme, type ColorToken, type ParseThemeResult } from "./parse.js";
 export { PRESETS, preset, type Preset, type PresetKey } from "./presets.js";
-export { createTheme, type SurfaceStyle, type Theme, type ThemeInput, type ThemeMode } from "./theme.js";
+export { STUDIO_EXTRA_PAIRS, STUDIO_FONTS, STUDIO_FONTS_URL, studioTheme } from "./studio.js";
+export {
+  createTheme,
+  type SurfaceStyle,
+  type Theme,
+  type ThemeFonts,
+  type ThemeInput,
+  type ThemeMode,
+} from "./theme.js";

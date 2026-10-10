@@ -33,6 +33,12 @@ export function toCssVariables(theme: Theme): CssVariables {
         ? "0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12)"
         : "none",
   };
+  if (safe.fonts !== undefined) {
+    variables["--sk-font"] = safe.fonts.sans;
+    variables["--sk-font-display"] = safe.fonts.display;
+    variables["--sk-font-mono"] = safe.fonts.mono;
+    variables["--sk-font-deva"] = safe.fonts.deva;
+  }
   for (const [name, value] of Object.entries(safe.colors)) {
     variables[`--sk-${kebab(name)}`] = value;
   }

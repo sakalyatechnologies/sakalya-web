@@ -20,6 +20,18 @@ export type ThemeMode = "light" | "dark";
 /** How cards and panels look. */
 export type SurfaceStyle = "soft" | "flat";
 
+/** CSS font stacks a theme may set. Each is validated as a plain list of family names. */
+export interface ThemeFonts {
+  /** Body and interface text. */
+  sans: string;
+  /** Page titles and large numbers; the editorial face. */
+  display: string;
+  /** Figures, codes and times. */
+  mono: string;
+  /** Devanagari text, such as a Sanskrit or Hindi name. */
+  deva: string;
+}
+
 export interface ThemeInput {
   /** The tenant's brand colour. */
   brand: HexColor;
@@ -34,6 +46,8 @@ export interface Theme {
   mode: ThemeMode;
   radius: number;
   surface: SurfaceStyle;
+  /** Font stacks. Themes without them use whatever fonts the app's stylesheet sets. */
+  fonts?: ThemeFonts;
   colors: {
     brand: HexColor;
     primary: HexColor;
@@ -83,8 +97,8 @@ export interface Theme {
   };
 }
 
-const AA_TEXT = 4.5;
-const AA_UI = 3;
+export const AA_TEXT = 4.5;
+export const AA_UI = 3;
 
 const STATUS = {
   light: { success: hex("#15803d"), warning: hex("#b45309"), danger: hex("#dc2626"), info: hex("#2563eb") },
@@ -93,9 +107,9 @@ const STATUS = {
 
 const DARK_BASE = hex("#0b1015");
 
-type StatusName = "success" | "warning" | "danger" | "info";
+export type StatusName = "success" | "warning" | "danger" | "info";
 
-type StatusTokens = Pick<
+export type StatusTokens = Pick<
   Theme["colors"],
   | StatusName
   | `${StatusName}Soft`
@@ -110,7 +124,7 @@ type StatusTokens = Pick<
  * Each status gets its colour, a tint, text that reads on the tint (and so on cards, which are
  * further from the text colour), and a label colour for the solid colour.
  */
-function statusTokens(colors: Record<StatusName, HexColor>, tint: (color: HexColor) => HexColor): StatusTokens {
+export function statusTokens(colors: Record<StatusName, HexColor>, tint: (color: HexColor) => HexColor): StatusTokens {
   const tints = {
     success: tint(colors.success),
     warning: tint(colors.warning),

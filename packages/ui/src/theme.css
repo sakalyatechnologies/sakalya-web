@@ -50,6 +50,10 @@
   --radius-card: var(--sk-radius);
   --shadow-card: var(--sk-shadow);
   --font-sans: var(--sk-font, "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif);
+  /* Set by themes that carry fonts (the Studio theme); otherwise they follow the sans face. */
+  --font-display: var(--sk-font-display, var(--sk-font, "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif));
+  --font-mono: var(--sk-font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+  --font-deva: var(--sk-font-deva, "Noto Serif Devanagari", serif);
 }
 
 @media (prefers-reduced-motion: reduce) {

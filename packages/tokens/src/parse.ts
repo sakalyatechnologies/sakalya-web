@@ -4,7 +4,7 @@
  */
 
 import { parseHexColor, type HexColor } from "./color.js";
-import type { Theme } from "./theme.js";
+import type { Theme, ThemeFonts } from "./theme.js";
 
 export type ColorToken = keyof Theme["colors"];
 
@@ -53,6 +53,38 @@ export const COLOR_TOKENS = [
 /** The largest corner radius a theme may set, in pixels. */
 export const MAX_RADIUS = 48;
 
+/** A font stack is a comma list of family names: letters, digits, spaces, hyphens and quotes. */
+const FONT_STACK = /^[\p{L}\p{N} ,"'-]{1,200}$/u;
+
+function isFontStack(value: unknown): value is string {
+  return (
+    typeof value === "string" &&
+    FONT_STACK.test(value) &&
+    value.split('"').length % 2 === 1 &&
+    value.split("'").length % 2 === 1
+  );
+}
+
+function parseFonts(input: unknown): ThemeFonts | string {
+  if (!isRecord(input)) {
+    return "fonts must be an object";
+  }
+  const { sans, display, mono, deva } = input;
+  if (!isFontStack(sans)) {
+    return "fonts.sans must be a list of font names";
+  }
+  if (!isFontStack(display)) {
+    return "fonts.display must be a list of font names";
+  }
+  if (!isFontStack(mono)) {
+    return "fonts.mono must be a list of font names";
+  }
+  if (!isFontStack(deva)) {
+    return "fonts.deva must be a list of font names";
+  }
+  return { sans, display, mono, deva };
+}
+
 export type ParseThemeResult = { ok: true; value: Theme } | { ok: false; error: string };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -100,5 +132,12 @@ export function parseTheme(input: unknown): ParseThemeResult {
   if (!hasEveryColor(parsed)) {
     return fail("colors are incomplete");
   }
-  return { ok: true, value: { mode, radius, surface, colors: parsed } };
+  if (input.fonts === undefined) {
+    return { ok: true, value: { mode, radius, surface, colors: parsed } };
+  }
+  const fonts = parseFonts(input.fonts);
+  if (typeof fonts === "string") {
+    return fail(fonts);
+  }
+  return { ok: true, value: { mode, radius, surface, fonts, colors: parsed } };
 }
