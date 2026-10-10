@@ -204,17 +204,30 @@ export interface PageHeaderProps {
   title: string;
   subtitle?: string;
   end?: ReactNode;
+  /**
+   * "display" sets the title in the theme's display face (an editorial serif in the Studio
+   * theme) at a lighter weight, and larger from tablet width. Default is the bold sans title.
+   */
+  variant?: "default" | "display";
 }
 
 /** A page title with an optional subtitle and actions on the right. */
-export function PageHeader({ title, subtitle, end }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, end, variant = "default" }: PageHeaderProps) {
   return (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-text">{title}</h1>
+        <h1
+          className={
+            variant === "display"
+              ? "font-display text-3xl font-medium tracking-tight text-text md:text-4xl"
+              : "text-3xl font-extrabold tracking-tight text-text"
+          }
+        >
+          {title}
+        </h1>
         {subtitle !== undefined ? <p className="mt-1 text-[15px] text-muted">{subtitle}</p> : null}
       </div>
-      {end ? <div className="flex items-center gap-3">{end}</div> : null}
+      {end ? <div className="flex flex-wrap items-center gap-3">{end}</div> : null}
     </div>
   );
 }

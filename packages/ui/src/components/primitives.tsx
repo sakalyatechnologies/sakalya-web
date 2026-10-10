@@ -100,10 +100,12 @@ export function IconBubble({ tone = "primary", size = "md", children }: IconBubb
   );
 }
 
+const AVATAR_SIZE = { sm: "size-8 text-xs", md: "size-10 text-sm", lg: "size-16 text-lg" } as const;
+
 export interface AvatarProps {
   name: string;
   imageUrl?: string;
-  size?: "sm" | "md";
+  size?: "sm" | "md" | "lg";
 }
 
 /** A person's photo, or their initials on a tinted circle. */
@@ -115,7 +117,7 @@ export function Avatar({ name, imageUrl, size = "md" }: AvatarProps) {
     .slice(0, 2)
     .map((part) => part.charAt(0).toUpperCase())
     .join("");
-  const dimension = size === "sm" ? "size-8 text-xs" : "size-10 text-sm";
+  const dimension = AVATAR_SIZE[size];
   if (imageUrl) {
     return <img src={imageUrl} alt={name} className={cx("shrink-0 rounded-full object-cover", dimension)} />;
   }

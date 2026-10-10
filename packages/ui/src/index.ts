@@ -1,3 +1,4 @@
+export { ActionBar, type ActionBarProps } from "./components/action-bar.js";
 export {
   AppShell,
   PageHeader,
@@ -9,6 +10,7 @@ export {
   type UserChipProps,
 } from "./components/app-shell.js";
 export { Badge, type BadgeProps, type BadgeVariant } from "./components/badge.js";
+export { BentoCard, type BentoCardProps, type BentoTone } from "./components/bento-card.js";
 export {
   BarChart,
   cleanBarData,
@@ -24,6 +26,21 @@ export {
   type ChipFilterGroupProps,
   type ChipFilterOption,
 } from "./components/chip-filter-group.js";
+export {
+  Carousel,
+  type CarouselLabels,
+  type CarouselProps,
+  type CarouselSlide,
+} from "./components/carousel.js";
+export {
+  ChatThread,
+  Composer,
+  type ChatMessage,
+  type ChatThreadLabels,
+  type ChatThreadProps,
+  type ComposerLabels,
+  type ComposerProps,
+} from "./components/chat.js";
 export {
   Checkbox,
   RadioGroup,
@@ -53,6 +70,7 @@ export {
   type DonutDataProblem,
   type DonutDatum,
 } from "./components/donut-chart.js";
+export { DeviceFrame, type DeviceFrameProps, type DeviceKind } from "./components/device-frame.js";
 export { Drawer, type DrawerProps } from "./components/drawer.js";
 export {
   EmptyState,
@@ -79,6 +97,21 @@ export {
   type TextInputType,
 } from "./components/inputs.js";
 export {
+  CountUp,
+  KpiRibbon,
+  type CountUpProps,
+  type KpiItem,
+  type KpiRibbonLabels,
+  type KpiRibbonProps,
+} from "./components/kpi-ribbon.js";
+export {
+  Heatmap,
+  HEAT_STEPS,
+  heatStep,
+  type HeatmapProps,
+  type HeatmapRow,
+} from "./components/heatmap.js";
+export {
   LineChart,
   niceScale,
   tickIndexes,
@@ -98,6 +131,13 @@ export {
   type TimelineProps,
 } from "./components/lists.js";
 export { Menu, type MenuItem, type MenuProps } from "./components/menu.js";
+export {
+  MiniMonth,
+  parseIsoDate,
+  type IsoDate,
+  type MiniMonthLabels,
+  type MiniMonthProps,
+} from "./components/mini-month.js";
 export { Meter, type MeterProps } from "./components/meter.js";
 export { type OverlaySize } from "./components/overlay-parts.js";
 export { Pagination, type PaginationLabels, type PaginationProps } from "./components/pagination.js";
@@ -114,8 +154,12 @@ export {
   type IconButtonProps,
   type PillProps,
 } from "./components/primitives.js";
+export { Pills, type PillOption, type PillsProps } from "./components/pills.js";
+export { QrCode, type QrCodeProps, type QrErrorCorrection } from "./components/qr-code.js";
 export { SearchInput, type SearchInputProps } from "./components/search-input.js";
 export { Select, type SelectOption, type SelectProps } from "./components/select.js";
+export { Stepper, type StepperLabels, type StepperProps, type StepperStep } from "./components/stepper.js";
+export { Tag, type TagProps, type TagTone } from "./components/tag.js";
 export { Tabs, type TabItem, type TabsProps } from "./components/tabs.js";
 export { ThemeScope, usePortalTheme, type PortalThemeProps, type ThemeScopeProps } from "./components/theme-scope.js";
 export {

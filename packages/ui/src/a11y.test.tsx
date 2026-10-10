@@ -1,21 +1,28 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axe from "axe-core";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { createTheme, hex } from "@sakalya/tokens";
+import { createTheme, hex, studioTheme } from "@sakalya/tokens";
 
 import {
+  ActionBar,
   AppShell,
+  Avatar,
   Badge,
   BarChart,
+  BentoCard,
   Button,
   Card,
   CardLink,
+  Carousel,
+  ChatThread,
   Checkbox,
   ChipFilterGroup,
+  Composer,
   DataTable,
   DateInput,
+  DeviceFrame,
   Dialog,
   DonutChart,
   Drawer,
@@ -23,17 +30,25 @@ import {
   ErrorState,
   Field,
   FormActions,
+  Heatmap,
+  KpiRibbon,
   Menu,
   Meter,
+  MiniMonth,
+  PageHeader,
   Pagination,
   PhoneInput,
+  Pills,
+  QrCode,
   RadioGroup,
   SearchInput,
   Select,
   Skeleton,
   StatCard,
+  Stepper,
   Switch,
   Tabs,
+  Tag,
   TextArea,
   TextInput,
   ThemeScope,
@@ -41,6 +56,9 @@ import {
 } from "./index.js";
 
 afterEach(cleanup);
+
+// axe walks the whole DOM, so the big catalogues take longer than the 5s default on a busy machine.
+vi.setConfig({ testTimeout: 30_000 });
 
 /**
  * Runs axe over the whole document, portals included. Colour contrast needs real layout, which
@@ -169,7 +187,70 @@ function Catalogue() {
   );
 }
 
+/** The Studio kit in one page: every component, in the Studio theme. */
+function StudioCatalogue({ mode }: { mode: "light" | "dark" }) {
+  return (
+    <ThemeScope theme={studioTheme(mode)}>
+      <main>
+        <PageHeader variant="display" title="Studio" subtitle="Kit" end={<Button>New</Button>} />
+        <Pills
+          label="Range"
+          value="week"
+          onValueChange={noop}
+          options={[
+            { value: "day", label: "Day" },
+            { value: "week", label: "Week" },
+          ]}
+        />
+        <KpiRibbon items={[{ id: "a", label: "Visits", value: 28, icon: <span>#</span>, trend: 12, hint: "vs last week" }, { id: "b", label: "Wait", value: 14, icon: <span>#</span>, trend: -3 }]} />
+        <BentoCard title="Tile" subtitle="Sub" action={<Button variant="ghost">Open</Button>}>
+          <Tag tone="success">Paid</Tag>
+          <Tag tone="inverse">Dark</Tag>
+          <Avatar name="Asha Rao" size="lg" />
+        </BentoCard>
+        <BentoCard title="Inverse" tone="inverse">
+          text
+        </BentoCard>
+        <BentoCard title="Hero" tone="hero">
+          text
+        </BentoCard>
+        <Carousel label="Upcoming" slides={[{ id: "a", label: "Asha", content: <p>A</p> }, { id: "b", label: "Ben", content: <p>B</p> }]} />
+        <MiniMonth value="2026-10-09" today="2026-10-09" busy={["2026-10-12"]} locale="en-US" />
+        <Heatmap
+          columns={["9a", "10a"]}
+          rows={[{ id: "r", label: "Room 1", values: [10, 95] }]}
+          summary="Occupancy"
+          describe={(value, row, column) => `${row.label}, ${column}: ${String(value)}%`}
+          legend={{ low: "Low", high: "High" }}
+        />
+        <Stepper steps={[{ id: "a", label: "One" }, { id: "b", label: "Two" }, { id: "c", label: "Three" }]} current={1} label="Progress" onStepSelect={noop} />
+        <QrCode value="https://example.com" label="Scan to pay" />
+        <DeviceFrame device="phone" label="Phone preview">
+          <p>Preview</p>
+        </DeviceFrame>
+        <DeviceFrame device="desktop" label="Desktop preview" address="example.test">
+          <p>Preview</p>
+        </DeviceFrame>
+        <ChatThread
+          label="Messages"
+          messages={[{ id: "1", author: "Asha Rao", text: "Hello", time: "9:00", flagged: true }, { id: "2", author: "Me", text: "Hi", time: "9:01", mine: true }]}
+          pinned={{ label: "Notice", author: "Asha Rao", text: "Hello" }}
+        />
+        <Composer onSend={noop} flagOption={{ label: "Send as notice" }} onAttach={noop} />
+        <ActionBar label="Page actions" status="3 changes">
+          <Button>Save</Button>
+        </ActionBar>
+      </main>
+    </ThemeScope>
+  );
+}
+
 describe("accessibility (axe)", () => {
+  it.each(["light", "dark"] as const)("finds no violations across the Studio kit in %s mode", async (mode) => {
+    render(<StudioCatalogue mode={mode} />);
+    expect(await violations()).toEqual([]);
+  });
+
   it("catches a real problem, so a pass means something", async () => {
     render(<button type="button" />);
     expect((await violations()).join()).toContain("button-name");
