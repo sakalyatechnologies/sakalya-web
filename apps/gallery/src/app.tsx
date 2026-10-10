@@ -4,6 +4,7 @@ import {
   PRESETS,
   checkContrast,
   createTheme,
+  studioTheme,
   parseHexColor,
   type HexColor,
   type Preset,
@@ -16,13 +17,15 @@ import { Catalogue } from "./catalogue.js";
 import { SampleDashboard } from "./sample-dashboard.js";
 import { SampleForm } from "./sample-form.js";
 import { SampleTable } from "./sample-table.js";
+import { StudioKit } from "./studio-kit.js";
 
 const FIRST_PRESET: Preset | undefined = PRESETS[0];
 
-type Page = "components" | "form" | "table" | "dashboard";
+type Page = "components" | "studio" | "form" | "table" | "dashboard";
 
 const PAGES: readonly { key: Page; label: string }[] = [
   { key: "components", label: "Components" },
+  { key: "studio", label: "Studio kit" },
   { key: "form", label: "Sample form" },
   { key: "table", label: "Sample table" },
   { key: "dashboard", label: "Sample dashboard" },
@@ -32,6 +35,8 @@ function PageContent({ page }: { page: Page }) {
   switch (page) {
     case "components":
       return <Catalogue />;
+    case "studio":
+      return <StudioKit />;
     case "form":
       return <SampleForm />;
     case "table":
@@ -46,6 +51,7 @@ const params = new URLSearchParams(window.location.search);
 const START_PAGE: Page = PAGES.find((entry) => entry.key === params.get("page"))?.key ?? "components";
 const START_MODE: ThemeMode = params.get("mode") === "dark" ? "dark" : "light";
 const START_COMPARE = params.get("compare") === "1";
+const START_STUDIO = params.get("theme") === "studio";
 
 /** One themed copy of the page, with its own toasts so they carry its theme. */
 function Themed({ theme, caption, children }: { theme: Theme; caption?: string; children: ReactNode }) {
@@ -72,6 +78,7 @@ export function App() {
   const [custom, setCustom] = useState("");
   const [mode, setMode] = useState<ThemeMode>(START_MODE);
   const [compare, setCompare] = useState(START_COMPARE);
+  const [studio, setStudio] = useState(START_STUDIO);
 
   const active = PRESETS.find((p) => p.key === presetKey) ?? FIRST_PRESET;
   const second = PRESETS.find((p) => p.key === (active?.key === "lotus" ? "ocean" : "lotus"));
@@ -80,10 +87,12 @@ export function App() {
 
   const theme = useMemo(
     () =>
-      brand === undefined
-        ? null
-        : createTheme({ brand, mode, radius: active?.radius ?? 16, surface: active?.surface ?? "soft" }),
-    [brand, mode, active],
+      studio
+        ? studioTheme(mode)
+        : brand === undefined
+          ? null
+          : createTheme({ brand, mode, radius: active?.radius ?? 16, surface: active?.surface ?? "soft" }),
+    [brand, mode, active, studio],
   );
   const issues = theme ? checkContrast(theme) : [];
 
@@ -95,8 +104,7 @@ export function App() {
     { name: customColor === null ? (active?.name ?? "Custom") : "Custom", brand, preset: active },
     ...(second === undefined ? [] : [{ name: second.name, brand: second.brand, preset: second }]),
   ];
-  const names = shown.map((variant) => variant.name);
-  const variants = shown.flatMap((variant) =>
+  const brandVariants = shown.flatMap((variant) =>
     (["light", "dark"] as const).map((variantMode) => ({
       caption: `${variant.name} · ${variantMode}`,
       theme: createTheme({
@@ -107,6 +115,15 @@ export function App() {
       }),
     })),
   );
+  // Studio first when chosen, so its two modes sit beside the active preset's.
+  const variants = studio
+    ? [
+        { caption: "Studio · light", theme: studioTheme("light") },
+        { caption: "Studio · dark", theme: studioTheme("dark") },
+        ...brandVariants.slice(0, 2),
+      ]
+    : brandVariants;
+  const names = studio ? ["Studio", ...shown.slice(0, 1).map((variant) => variant.name)] : shown.map((variant) => variant.name);
 
   return (
     <div className="min-h-full bg-slate-100 text-slate-900">
@@ -130,6 +147,17 @@ export function App() {
           </nav>
           <fieldset className="flex flex-wrap items-center gap-2">
             <legend className="sr-only">Theme preset</legend>
+            <button
+              type="button"
+              aria-pressed={studio}
+              title="Editorial workspace look: ivory, sage and a deep green rail"
+              onClick={() => {
+                setStudio(!studio);
+              }}
+              className={pillClass(studio)}
+            >
+              Studio
+            </button>
             {PRESETS.map((p) => (
               <button
                 key={p.key}
