@@ -18,6 +18,7 @@
 | Data display | `DataTable`, `Pagination`, `Tabs`, `Badge`, `Pill`, `StatCard`, `Timeline`, `AttentionList`, `PersonList`, `BarChart` | `DataTable` sorts and pages on the client and becomes cards below 640px |
 | States | `Skeleton`, `EmptyState`, `ErrorState` | `ErrorState` shows the request ID for support |
 | Primitives | `Button`, `IconButton`, `Avatar`, `IconBubble`, `Link`, `LinkProvider` | |
+| Studio kit | `BentoCard`, `Tag`, `Pills`, `KpiRibbon` + `CountUp`, `MiniMonth`, `Heatmap`, `Stepper`, `ActionBar`, `QrCode`, `DeviceFrame`, `ChatThread` + `Composer`, `Carousel`; `PageHeader variant="display"`, `Avatar size="lg"` | Built for the Studio theme (`studioTheme(mode)` with `ThemeFonts`, applied as `--sk-font*`), but they only read tokens, so any theme works. `QrCode` uses `qrcode-generator` and draws SVG; `Composer` ignores Enter while an input method is composing |
 
 Links: `AppShell`'s `renderLink` (or `LinkProvider`) renders every library link with the app's router link, so navigation never reloads the app.
 
